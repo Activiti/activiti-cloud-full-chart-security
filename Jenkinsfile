@@ -15,7 +15,7 @@ pipeline {
 
       PREVIEW_VERSION = "0.0.0-SNAPSHOT-$BRANCH_NAME-$BUILD_NUMBER"
       PREVIEW_NAMESPACE = "example-$BRANCH_NAME-$BUILD_NUMBER".toLowerCase()
-      
+      GLOBAL_GATEWAY_DOMAIN="35.228.195.195.nip.io"
       REALM = "activiti"
 
     }
@@ -25,21 +25,21 @@ pipeline {
           branch 'PR-*'
         }
         environment {
-         GATEWAY_HOST = "activiti-cloud-gateway.$PREVIEW_NAMESPACE.35.228.195.195.nip.io"
-         SSO_HOST = "activiti-keycloak.$PREVIEW_NAMESPACE.35.228.195.195.nip.io"
+         GATEWAY_HOST = "activiti-cloud-gateway.$PREVIEW_NAMESPACE.$GLOBAL_GATEWAY_DOMAIN"
+         SSO_HOST = "activiti-cloud-gateway.$PREVIEW_NAMESPACE.$GLOBAL_GATEWAY_DOMAIN"
         }
         steps {
-          sh 'make validate'
           container('maven') {
+          sh 'make validate'
            dir ("./charts/$APP_NAME") {
 	           // sh 'make build'
-              sh 'make install'
+              sh 'make install-security'
             }
 
             dir("./activiti-cloud-acceptance-scenarios") {
               git 'https://github.com/Activiti/activiti-cloud-acceptance-scenarios.git'
               sh 'sleep 30'
-              sh "mvn clean install -DskipTests &&mvn -pl 'security-policies-acceptance-tests' verify"
+              sh "mvn clean install -DskipTests && mvn -pl 'security-policies-acceptance-tests' clean verify"
             }
           }
         }
@@ -49,8 +49,8 @@ pipeline {
           branch 'master'
         }
 	environment {
-         GATEWAY_HOST = "activiti-cloud-gateway.$PREVIEW_NAMESPACE.35.228.195.195.nip.io"
-         SSO_HOST = "activiti-keycloak.$PREVIEW_NAMESPACE.35.228.195.195.nip.io"
+         GATEWAY_HOST = "activiti-cloud-gateway.$PREVIEW_NAMESPACE.$GLOBAL_GATEWAY_DOMAIN"
+         SSO_HOST = "activiti-cloud-gateway.$PREVIEW_NAMESPACE.$GLOBAL_GATEWAY_DOMAIN"
         }      
         steps {
           container('maven') {
@@ -61,37 +61,32 @@ pipeline {
             sh "jx step git credentials"
             // so we can retrieve the version in later steps
             sh "echo \$(jx-release-version) > VERSION"
+        //RUNTIME bundle tests
             dir ("./charts/$APP_NAME") {
 	           // sh 'make build'
               sh 'make install-security'
             }
-	   //run tests	
+
             dir("./activiti-cloud-acceptance-scenarios") {
               git 'https://github.com/Activiti/activiti-cloud-acceptance-scenarios.git'
               sh 'sleep 30'
-              sh "mvn clean install -DskipTests &&mvn -pl 'security-policies-acceptance-tests' verify"
-            }	  
-	    //end run tests	  
-            //dir ("./charts/$APP_NAME") {
-	    //  retry(5) {    
-            //    sh 'make tag'
-            //  }
-            //sh 'make release'
-	    //  retry(5) {    
-            //    sh 'make github'
-            //  }
-            //}
+              sh "mvn clean install -DskipTests && mvn -pl 'security-policies-acceptance-tests' clean verify"
+            }	       
+            }
           }
         }
       }
+
+      
+       }
     }
    post {
         always {
           container('maven') {
             dir("./charts/$APP_NAME") {
-               sh "make delete-security"
+               sh "make delete"
             }
-            sh "kubectl delete namespace $PREVIEW_NAMESPACE-security"
+            sh "kubectl delete namespace $PREVIEW_NAMESPACE-security" 
           }
           cleanWs()
         }
