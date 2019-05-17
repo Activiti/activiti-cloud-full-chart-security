@@ -81,7 +81,7 @@ pipeline {
         always {
           container('maven') {
             dir("./charts/$APP_NAME") {
-               sh "make delete"
+               sh "make delete-security"
             }
             sh "kubectl delete namespace $PREVIEW_NAMESPACE-security" 
           }
