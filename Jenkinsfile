@@ -63,7 +63,7 @@ pipeline {
             sh "echo \$(jx-release-version) > VERSION"
             dir ("./charts/$APP_NAME") {
 	           // sh 'make build'
-              sh 'make install'
+              sh 'make install-security'
             }
 	   //run tests	
             dir("./activiti-cloud-acceptance-scenarios") {
@@ -89,9 +89,9 @@ pipeline {
         always {
           container('maven') {
             dir("./charts/$APP_NAME") {
-               sh "make delete"
+               sh "make delete-security"
             }
-            sh "kubectl delete namespace $PREVIEW_NAMESPACE" 
+            sh "kubectl delete namespace $PREVIEW_NAMESPACE-security"
           }
           cleanWs()
         }
