@@ -108,7 +108,7 @@ activiti-cloud-full-example:
       - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
         value: "WRITE"
       - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-        value: "rb-my-app"
+        value: "rb"
       - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
         value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
       - name: ACTIVITI_SECURITY_POLICIES_1_NAME
@@ -118,7 +118,7 @@ activiti-cloud-full-example:
       - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
         value: "WRITE"
       - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-        value: "rb-my-app"
+        value: "rb"
       - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
         value: "*"
   activiti-cloud-query:
@@ -135,7 +135,7 @@ activiti-cloud-full-example:
       - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
         value: "WRITE"
       - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-        value: "rb-my-app"
+        value: "rb"
       - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
         value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
       - name: ACTIVITI_SECURITY_POLICIES_1_NAME
@@ -145,7 +145,7 @@ activiti-cloud-full-example:
       - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
         value: "WRITE"
       - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-        value: "rb-my-app"
+        value: "rb"
       - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
         value: "*"
 
@@ -183,7 +183,7 @@ activiti-cloud-full-example:
       - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
         value: "WRITE"
       - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-        value: "rb-my-app"
+        value: "rb"
       - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
         value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
       - name: ACTIVITI_SECURITY_POLICIES_1_NAME
@@ -193,7 +193,7 @@ activiti-cloud-full-example:
       - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
         value: "WRITE"
       - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-        value: "rb-my-app"
+        value: "rb"
       - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
         value: "*"
   activiti-cloud-identity:
