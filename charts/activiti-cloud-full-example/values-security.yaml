@@ -63,199 +63,200 @@ global:
     # http: *http ## Sync with Jx expose controller http conig
     # tlsacme: *tlsacme ## Sync with Jx expose controller tlsacme conig
 
-
-activiti-cloud-modeling:
-  enabled: true
-  service:
-    name: activiti-cloud-modeling
-  ingress:
+activiti-cloud-full-example:
+  activiti-cloud-modeling:
     enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/enable-cors: "true"
-      nginx.ingress.kubernetes.io/cors-allow-headers: "*"
-      nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
-    frontend:
-      image:
-        repository: activiti/activiti-modeling-app
-        #        tag: 7.0.0.SR1
-        pullPolicy: Always
-      annotations: {}
-    backend:
-      image:
-        repository: activiti/activiti-cloud-modeling
-        #        tag: 7.0.0.SR1
-        pullPolicy: Always
-      annotations: {}
+    service:
+      name: activiti-cloud-modeling
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+        nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
+      frontend:
+        image:
+          repository: activiti/activiti-modeling-app
+          #        tag: 7.0.0.SR1
+          pullPolicy: Always
+        annotations: {}
+      backend:
+        image:
+          repository: activiti/activiti-cloud-modeling
+          #        tag: 7.0.0.SR1
+          pullPolicy: Always
+        annotations: {}
 
-runtime-bundle:
-  enabled: true
-  service:
-    name: rb-my-app
-  image:
-    pullPolicy: Always
-    repository: activiti/example-runtime-bundle
-    #    tag: 7.0.0.SR1
-
-  extraEnv: |
-    - name: ACTIVITI_SECURITY_POLICIES_0_NAME
-      value: "HR Group restricted to SimpleProcess and ConnectorProcess"
-    - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
-      value: "hr"
-    - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
-      value: "WRITE"
-    - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-      value: "rb-my-app"
-    - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
-      value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
-    - name: ACTIVITI_SECURITY_POLICIES_1_NAME
-      value: "testgroup not restricted at all"
-    - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
-      value: "testgroup"
-    - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
-      value: "WRITE"
-    - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-      value: "rb-my-app"
-    - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
-      value: "*"
-activiti-cloud-query:
-  service:
-    name: query
-  image:
-    pullPolicy: Always
-
-  extraEnv: |
-    - name: ACTIVITI_SECURITY_POLICIES_0_NAME
-      value: "HR Group restricted to SimpleProcess and ConnectorProcess"
-    - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
-      value: "hr"
-    - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
-      value: "WRITE"
-    - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-      value: "rb-my-app"
-    - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
-      value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
-    - name: ACTIVITI_SECURITY_POLICIES_1_NAME
-      value: "testgroup not restricted at all"
-    - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
-      value: "testgroup"
-    - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
-      value: "WRITE"
-    - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-      value: "rb-my-app"
-    - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
-      value: "*"
-
-activiti-cloud-connector:
-  enabled: true
-  service:
-    name: example-cloud-connector
-  image:
-    pullPolicy: Always
-    repository: activiti/example-cloud-connector
-    #    tag: 7.0.0.SR1
-
-
-activiti-cloud-notifications-graphql:
-  enabled: true
-  service:
-    name: activiti-cloud-notifications
-  image:
-    pullPolicy: Always
-    repository: activiti/activiti-cloud-notifications-graphql
-#    tag: 7.0.0.SR1
-
-activiti-cloud-audit:
-  service:
-    name: audit
-  image:
-    pullPolicy: Always
-    repository: activiti/activiti-cloud-audit
-#    tag: 7.0.0.SR1
-  extraEnv: |
-    - name: ACTIVITI_SECURITY_POLICIES_0_NAME
-      value: "HR Group restricted to SimpleProcess and ConnectorProcess"
-    - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
-      value: "hr"
-    - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
-      value: "WRITE"
-    - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
-      value: "rb-my-app"
-    - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
-      value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
-    - name: ACTIVITI_SECURITY_POLICIES_1_NAME
-      value: "testgroup not restricted at all"
-    - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
-      value: "testgroup"
-    - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
-      value: "WRITE"
-    - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
-      value: "rb-my-app"
-    - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
-      value: "*"
-
-activiti-keycloak:
-  enabled: true
-  ingress:
+  runtime-bundle:
     enabled: true
-  keycloak:
-    enabled: true
-    keycloak:
-      preStartScript: |
-        /opt/jboss/keycloak/bin/add-user.sh -u admin -p admin
-        /opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u admin -p admin
-        cp /realm/activiti-realm.json .
-        sed -i 's/placeholder.com/*/g' activiti-realm.json
+    service:
+      name: rb-my-app
+    image:
+      pullPolicy: Always
+      repository: activiti/example-runtime-bundle
+      #    tag: 7.0.0.SR1
 
-activiti-cloud-gateway:
-  service:
-    name: activiti-cloud-gateway
-  image:
-    repository: activiti/activiti-cloud-gateway
-    #    tag: 7.0.0.SR1
-    pullPolicy: IfNotPresent
-  ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/enable-cors: "true"
-      nginx.ingress.kubernetes.io/cors-allow-headers: "*"
-      nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
-postgres:
-  enabled: true
-  postgresqlPassword: password
-  resources:
-    requests:
-      cpu: 350m
-      memory: 512Mi
+    extraEnv: |
+      - name: ACTIVITI_SECURITY_POLICIES_0_NAME
+        value: "HR Group restricted to SimpleProcess and ConnectorProcess"
+      - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
+        value: "hr"
+      - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
+        value: "WRITE"
+      - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
+        value: "rb-my-app"
+      - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
+        value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
+      - name: ACTIVITI_SECURITY_POLICIES_1_NAME
+        value: "testgroup not restricted at all"
+      - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
+        value: "testgroup"
+      - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
+        value: "WRITE"
+      - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
+        value: "rb-my-app"
+      - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
+        value: "*"
+  activiti-cloud-query:
+    service:
+      name: query
+    image:
+      pullPolicy: Always
 
-rabbitmq:
-  enabled: true
-  service:
-    clusterIP: None
-  persistentVolume:
+    extraEnv: |
+      - name: ACTIVITI_SECURITY_POLICIES_0_NAME
+        value: "HR Group restricted to SimpleProcess and ConnectorProcess"
+      - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
+        value: "hr"
+      - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
+        value: "WRITE"
+      - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
+        value: "rb-my-app"
+      - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
+        value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
+      - name: ACTIVITI_SECURITY_POLICIES_1_NAME
+        value: "testgroup not restricted at all"
+      - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
+        value: "testgroup"
+      - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
+        value: "WRITE"
+      - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
+        value: "rb-my-app"
+      - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
+        value: "*"
+
+  activiti-cloud-connector:
     enabled: true
-  rabbitmqUsername: "guest"
-  rabbitmqPassword: "guest"
-  rabbitmqErlangCookie: 124567890abcdefghijklmnopqrstuv
-  rabbitmqSTOMPPlugin:
+    service:
+      name: example-cloud-connector
+    image:
+      pullPolicy: Always
+      repository: activiti/example-cloud-connector
+      #    tag: 7.0.0.SR1
+
+
+  activiti-cloud-notifications-graphql:
     enabled: true
-  resources:
-    limits:
-      cpu: 1
-      memory: 2Gi
-    requests:
-      cpu: 350m
-      memory: 512Mi
-  rbac:
-    create: true
-  replicaCount: 1
-  ingress:
+    service:
+      name: activiti-cloud-notifications
+    image:
+      pullPolicy: Always
+      repository: activiti/activiti-cloud-notifications-graphql
+  #    tag: 7.0.0.SR1
+
+  activiti-cloud-audit:
+    service:
+      name: audit
+    image:
+      pullPolicy: Always
+      repository: activiti/activiti-cloud-audit
+  #    tag: 7.0.0.SR1
+    extraEnv: |
+      - name: ACTIVITI_SECURITY_POLICIES_0_NAME
+        value: "HR Group restricted to SimpleProcess and ConnectorProcess"
+      - name: ACTIVITI_SECURITY_POLICIES_0_GROUPS
+        value: "hr"
+      - name: ACTIVITI_SECURITY_POLICIES_0_ACCESS
+        value: "WRITE"
+      - name: ACTIVITI_SECURITY_POLICIES_0_SERVICENAME
+        value: "rb-my-app"
+      - name: ACTIVITI_SECURITY_POLICIES_0_KEYS
+        value: "SimpleProcess,ConnectorProcess,fixSystemFailure,twoTaskProcess"
+      - name: ACTIVITI_SECURITY_POLICIES_1_NAME
+        value: "testgroup not restricted at all"
+      - name: ACTIVITI_SECURITY_POLICIES_1_GROUPS
+        value: "testgroup"
+      - name: ACTIVITI_SECURITY_POLICIES_1_ACCESS
+        value: "WRITE"
+      - name: ACTIVITI_SECURITY_POLICIES_1_SERVICENAME
+        value: "rb-my-app"
+      - name: ACTIVITI_SECURITY_POLICIES_1_KEYS
+        value: "*"
+  activiti-cloud-identity:
+    enabled: true
+  activiti-keycloak:
     enabled: false
-    #    hostName: "rabbitmq.jx-staging.X.X.X.X.nip.io"
-    path: /
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      nginx.ingress.kubernetes.io/enable-cors: "true"
-      nginx.ingress.kubernetes.io/cors-allow-headers: "*"
-      nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
+    ingress:
+      enabled: true
+    keycloak:
+      enabled: true
+      keycloak:
+        preStartScript: |
+          /opt/jboss/keycloak/bin/add-user.sh -u admin -p admin
+          /opt/jboss/keycloak/bin/add-user-keycloak.sh -r master -u admin -p admin
+          cp /realm/activiti-realm.json .
+          sed -i 's/placeholder.com/*/g' activiti-realm.json
+
+  activiti-cloud-gateway:
+    service:
+      name: activiti-cloud-gateway
+    image:
+      repository: activiti/activiti-cloud-gateway
+      #    tag: 7.0.0.SR1
+      pullPolicy: IfNotPresent
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+        nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
+  postgres:
+    enabled: true
+    postgresqlPassword: password
+    resources:
+      requests:
+        cpu: 350m
+        memory: 512Mi
+
+  rabbitmq:
+    enabled: true
+    service:
+      clusterIP: None
+    persistentVolume:
+      enabled: true
+    rabbitmqUsername: "guest"
+    rabbitmqPassword: "guest"
+    rabbitmqErlangCookie: 124567890abcdefghijklmnopqrstuv
+    rabbitmqSTOMPPlugin:
+      enabled: true
+    resources:
+      limits:
+        cpu: 1
+        memory: 2Gi
+      requests:
+        cpu: 350m
+        memory: 512Mi
+    rbac:
+      create: true
+    replicaCount: 1
+    ingress:
+      enabled: false
+      #    hostName: "rabbitmq.jx-staging.X.X.X.X.nip.io"
+      path: /
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/enable-cors: "true"
+        nginx.ingress.kubernetes.io/cors-allow-headers: "*"
+        nginx.ingress.kubernetes.io/x-forwarded-prefix: "true"
