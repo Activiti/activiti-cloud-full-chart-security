@@ -8,7 +8,7 @@ pipeline {
     environment {
       ORG               = 'activiti'
       APP_NAME          = 'activiti-cloud-full-example'
-      CHARTMUSEUM_CREDS = credentials('jenkins-x-chartmuseum')
+
       GITHUB_CHARTS_REPO    = "https://github.com/Activiti/activiti-cloud-helm-charts.git"
       GITHUB_HELM_REPO_URL = "https://activiti.github.io/activiti-cloud-helm-charts/"
       HELM_RELEASE_NAME = "example-$BRANCH_NAME-$BUILD_NUMBER".toLowerCase()
@@ -17,7 +17,6 @@ pipeline {
       PREVIEW_NAMESPACE = "example-$BRANCH_NAME-$BUILD_NUMBER".toLowerCase()
       GLOBAL_GATEWAY_DOMAIN="35.228.195.195.nip.io"
       REALM = "activiti"
-
     }
     stages {
       stage('CI Build and push snapshot') {
@@ -76,6 +75,13 @@ pipeline {
       
     }
    post {
+	failure {
+           slackSend(
+             channel: "#activiti-community-builds",
+             color: "danger",
+             message: "activiti-cloud-full-chart-security branch=$BRANCH_NAME is failed http://jenkins.jx.35.228.195.195.nip.io/job/Activiti/job/activiti-cloud-full-chart-security/"
+           )
+        }    
         always {
           container('maven') {
             dir("./charts/$APP_NAME") {
